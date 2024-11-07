@@ -25,7 +25,7 @@ class Game {
 
     // while 루프는 캐릭터의 체력이 0보다 크고, 아직 물리치지 않은 몬스터가 있을 때 반복
     while (character.health > 0 && defeatedMonsters < monsters.length) {
-      print("새로운 몬스터가 나타났습니다!");
+      print("새로운 몬스터가 나타났습니다!\n");
       Monster monster = getRandomMonster(); // 랜덤으로 몬스터 선택
       monster.showStatus();
       print("\n");
@@ -37,9 +37,6 @@ class Game {
         print("${character.name}이(가) 패배했습니다.\n");
         saveResult("패배"); // 패배 결과를 파일에 저장
         break; // while 루프 종료 (게임 종료)
-      } else {
-        print("${monster.name}을(를) 물리쳤습니다!\n");
-        defeatedMonsters++;
       }
       if (defeatedMonsters == monsters.length) {
         // 설정한 물리친 몬스터 개수만큼 몬스터를 물리치면 게임에서 승리
@@ -47,14 +44,24 @@ class Game {
         saveResult("승리"); // 승리 결과를 파일에 저장
         break; // while 루프 종료 (게임 종료)
       } else {
-        stdout.write(
-            "다음 몬스터와 대결하시겠습니까? (y/n): "); // 몬스터를 물리칠 때마다 다음 몬스터와 대결할 건지 선택
-        String? choice = stdin.readLineSync(); // 사용자 입력 받기
-        if (choice?.toLowerCase() != "y") break; // 사용자가 'y'를 입력하지 않으면 게임 종료
+        while (true) {
+          stdout.write(
+              "다음 몬스터와 대결하시겠습니까? (y/n): "); // 몬스터를 물리칠 때마다 다음 몬스터와 대결할 건지 선택
+          String? choice = stdin.readLineSync(); // 사용자 입력 받기
+          if (choice == "y") {
+            break;
+          } else if (choice == "n") {
+            print("게임을 종료합니다.\n");
+            break;
+          } else {
+            print("잘못된 입력입니다.\n");
+            continue;
+          }
+        }
       }
     }
 
-    print("\n게임이 종료되었습니다.\n");
+    print("게임이 종료되었습니다.\n");
 
     if (monsters.isNotEmpty && character.health > 0) saveResult("중단됨");
     // 만약 캐릭터가 살아있고, 모든 몬스터를 물리치지 못했으면 "중단됨" 결과 저장
@@ -73,26 +80,30 @@ class Game {
       String? action = stdin.readLineSync(); // 사용자로부터 행동 입력 받기
 
       if (action == "1") {
-        character.attackMonster(monster); // 사용자가 공격하기를 선택하면 캐릭터가 몬스터를 공격
+        // 공격을 선택한 경우
+        character.attackMonster(monster); // 캐릭터가 몬스터를 공격
+        if (monster.health > 0) {
+          monster.attackCharacter(character); // 몬스터가 반격
+        }
       } else if (action == "2") {
-        monster.attackCharacter(character); // 방어하기를 선택하면 먼저 몬스터가 캐릭터를 공격하고
-        character.defend(monster.maxAttack); // 그 후 캐릭터는 방어하여 체력을 회복 ????????
+        // 방어를 선택한 경우
+        monster.attackCharacter(character); // 몬스터의 공격
+        character.defend(monster.maxAttack); // 캐릭터의 방어 및 체력 회복
       } else {
-        print("잘못 입력하셨습니다.\n");
-        continue; //잘못된 입력이 들어오면 다시 행동을 선택하도록 한다.
+        print("잘못 입력하셨습니다. 다시 입력해 주세요.\n");
+        continue; // 잘못된 입력이 들어오면 루프 재시작
       }
 
-      if (monster.health > 0) {
-        monster.attackCharacter(character);
-        // 만약 몬스터가 아직 살아있다면, 다음 턴에 몬스터가 캐릭터를 공격
+      // 전투 종료 조건 체크
+      if (character.health <= 0) {
+        print("${character.name}이(가) 전투에서 패배했습니다.\n");
+        break;
+      } else if (monster.health <= 0) {
+        defeatedMonsters++;
+        monsters.remove(monster); // 물리친 몬스터를 리스트에서 제거
+        print("${monster.name}을(를) 물리쳤습니다!\n");
+        break;
       }
-    }
-
-    if (monster.health <= 0) {
-      // 만약 전투 중에 몬스터의 체력이 0 이하로 떨어지면 (몬스터가 죽으면)
-      defeatedMonsters++; // 물리친 몬스터 수 증가
-      monsters.remove(monster); // 해당 몬스터 리스트에서 삭제
-      print("${monster.name}을(를) 물리쳤습니다!\n");
     }
   }
 
@@ -113,7 +124,7 @@ class Game {
       // 사용자가 y 또는 Y 를 입력하면 결과 저장
       final file = File('data/result.txt');
       file.writeAsStringSync(
-          "캐릭터 이름: ${character.name} 남은 체력: ${character.health} 게임 결과: $result");
+          "캐릭터 이름: ${character.name} 남은 체력: ${character.health} 게임 결과: $result\n");
       print("결과가 저장되었습니다.\n");
     }
   }

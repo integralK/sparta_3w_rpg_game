@@ -25,9 +25,9 @@ String getValidCharacterName() {
     name = stdin.readLineSync() ?? "";
 
     if (name.isEmpty) {
-      print("이름은 빈 문자열일 수 없습니다. 다시 입력해주세요.");
+      print("이름은 빈 문자열일 수 없습니다. 다시 입력해주세요.\n");
     } else if (!nameRegExp.hasMatch(name)) {
-      print("이름에는 한글 또는 영문 대소문자만 사용할 수 있습니다. 다시 입력해주세요.");
+      print("이름에는 한글 또는 영문 대소문자만 사용할 수 있습니다. 다시 입력해주세요.\n");
     } else {
       break; // 조건을 모두 만족하면 루프를 빠져나옴
     }

@@ -16,7 +16,7 @@ class Character {
     int damage = attack - monster.defense; // 캐릭터의 공격력에서 몬스터의 방어력만큼을 뺀 데미지 계산
     if (damage < 0) damage = 0; // 데미지는 최소 0이 되도록 보정
     monster.health -= damage; // 데미지만큼 몬스터의 체력을 감소
-    print('$name이(가) ${monster.name}에게 $damage 만큼의 피해를 입혔습니다.');
+    print('$name이(가) ${monster.name}에게 $damage 만큼의 피해를 입혔습니다.\n');
   }
 
   // 방어 메서드: 방어 시 체력을 회복하는 기능
@@ -24,7 +24,6 @@ class Character {
     int recoveredHealth = damage ~/ 2; // 받은 데미지의 절반만큼 체력 회복
     health += recoveredHealth;
     print('$name이(가) 방어하여 $recoveredHealth 만큼 체력을 회복했습니다.\n');
-    print('현재 체력: $health\n');
   }
 
   // 캐릭터 상태 출력 메서드
