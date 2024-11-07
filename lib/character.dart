@@ -15,7 +15,7 @@ class Character {
     // print('$name이(가) ${monster.name}을(를) 공격합니다!\n'); 라고 입력할 수도 있다.
     int damage = attack - monster.defense; // 캐릭터의 공격력에서 몬스터의 방어력만큼을 뺀 데미지 계산
     if (damage < 0) damage = 0; // 데미지는 최소 0이 되도록 보정
-    monster.health -= damage; // 몬스터의 체력을 감소
+    monster.health -= damage; // 데미지만큼 몬스터의 체력을 감소
     print('$name이(가) ${monster.name}에게 $damage 만큼의 피해를 입혔습니다.');
   }
 

@@ -4,9 +4,7 @@ import 'package:sparta_3w_rpg_game/character.dart'; // 'Character' 클래스 (�
 import 'package:sparta_3w_rpg_game/monster.dart';
 
 void main() {
-  // 사용자로부터 캐릭터 이름 입력 받기
-  stdout.write("캐릭터의 이름을 입력하세요: ");
-  String name = stdin.readLineSync() ?? "";
+  String name = getValidCharacterName(); // 사용자로부터 유효한 캐릭터 이름을 입력받기
 
   Character character = loadCharacter(name); // 캐릭터 스탯 파일을 읽고 캐릭터 생성
   List<Monster> monsters = loadMonsters(); // 몬스터 리스트 생성
@@ -14,6 +12,28 @@ void main() {
 
   // 게임 시작
   game.startGame();
+}
+
+// 유효한 캐릭터 이름을 입력받는 함수
+String getValidCharacterName() {
+  // 사용자가 유효한 이름을 입력할 때까지 반복해서 입력을 받는다.
+  RegExp nameRegExp = RegExp(r'^[a-zA-Z가-힣]+$'); // 한글, 영문 대소문자만 허용하는 정규표현식
+  String name;
+
+  while (true) {
+    stdout.write("캐릭터의 이름을 입력하세요: ");
+    name = stdin.readLineSync() ?? "";
+
+    if (name.isEmpty) {
+      print("이름은 빈 문자열일 수 없습니다. 다시 입력해주세요.");
+    } else if (!nameRegExp.hasMatch(name)) {
+      print("이름에는 한글 또는 영문 대소문자만 사용할 수 있습니다. 다시 입력해주세요.");
+    } else {
+      break; // 조건을 모두 만족하면 루프를 빠져나옴
+    }
+  }
+
+  return name;
 }
 
 // 캐릭터 스탯 파일에서 읽어오기 메서드
@@ -29,11 +49,12 @@ Character loadCharacter(String name) {
     int attack = int.parse(stats[1]); // 두 번째 값은 공격력
     int defense = int.parse(stats[2]); // 세 번째 값은 방어력
 
-    return Character(name, health, attack,
-        defense); // 불러온 데이터를 기반으로 Character 객체 생성 (character 객체반환)
+    return Character(name, health, attack, defense);
+    // 불러온 데이터를 기반으로 Character 객체 생성 (character 객체반환)
   } catch (e) {
-    print('캐릭터 데이터를 불러오는 데 실패했습니다: $e\n');
-    exit(1); // 오류 발생 시 프로그램 종료
+    print('캐릭터 데이터를 불러오는 데 실패했습니다: $e\n'); // 기본 캐릭터 생성하여 반환
+    // exit(1); 오류 발생 시 프로그램 종료
+    return Character(name, 100, 10, 5); // 기본 체력, 공격력, 방어력 값
   }
 }
 
@@ -62,7 +83,8 @@ List<Monster> loadMonsters() {
 
     return monsters; // 몬스터 리스트 반환
   } catch (e) {
-    print('몬스터 데이터를 불러오는 데 실패했습니다: $e\n');
-    exit(1); // 오류 발생 시 프로그램 종료
+    print('몬스터 데이터를 불러오는 데 실패했습니다: $e\n'); // 빈 리스트 반환하여 프로그램이 종료되지 않도록 함
+    //  exit(1); 오류 발생 시 프로그램 종료
+    return monsters;
   }
 }

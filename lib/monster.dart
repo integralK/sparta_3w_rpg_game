@@ -5,14 +5,15 @@ class Monster {
   // 몬스터의 속성 정의
   String name;
   int health;
-  int maxAttack;
+  int maxAttack; //랜덤으로 지정할 공격력 범위 최대값
   int defense = 0; // 몬스터는 방어력이 0으로 고정
 
   // 생성자: 몬스터의 초기 속성을 설정
   Monster(this.name, this.health, this.maxAttack);
 
   // 랜덤으로 몬스터의 공격력을 설정
-  int get attack => max(5,
+  int get attack => max(
+      5, // 몬스터의 공격력은 캐릭터의 방어력보다 작을 수 없다. 랜덤으로 지정하여 캐릭터의 방어력과 랜덤 값 중 최대값으로 설정.
       Random().nextInt(maxAttack + 1)); // getter방식은 여러 곳에서 동일한 로직을 재사용해야 할 때 유용
   /* max(a, b) 함수는 a와 b 중 더 큰 값을 반환한다. 여기서는 랜덤으로 생성한 공격력 값이 5보다 작으면 5로 설정하고, 
      5 이상이면 랜덤 값을 그대로 사용하게 된다. 이로 인해 몬스터의 공격력은 최소 5 이상이 되며, 최대값은 maxAttack이 된다. */

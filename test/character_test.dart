@@ -34,7 +34,7 @@ void main() {
 
       // 방어 메서드 호출 전후의 체력 확인
       int initialHealth = character.health;
-      character.defend();
+      character.defend(5);
 
       // 방어 후 체력이 증가했는지 확인
       expect(character.health, greaterThan(initialHealth));
