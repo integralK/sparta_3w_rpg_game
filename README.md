@@ -1,5 +1,7 @@
 [Dart 심화] 개인 과제 - 전투 RPG 게임
 
+> > 미완성이고 오류가 많아 아쉽고 피드백 받고나면 수정 보완이 필요할 것 같습니다.
+
 ## 1️⃣ **Intro : 과제 시나리오**
 
 # 시나리오
@@ -97,7 +99,9 @@
     - 캐릭터 → 체력, 공격력, 방어력
     - 몬스터 →이름, 체력, 공격력 최대값(설정된 최대값에서 `Random()` 을 사용하여 공격력 지정)
 - 힌트
+
   - `dart:io` 라이브러리의 File 클래스를 사용하여 파일을 읽습니다. ([File 클래스 문서](https://api.dart.dev/stable/3.5.3/dart-io/File-class.html))
+
     ```dart
     import 'dart:io';
 
@@ -125,9 +129,12 @@
       ...
     }
     ```
+
     - `split()` 메서드를 사용하여 CSV 데이터를 분리한 후 변수(`health`, `attack`, `defense`)에 선언해줍니다.
     - **심화 내용**
+
       - 동기/비동기 두가지 방식으로 파일을 불러올 수 있습니다.
+
       ```dart
       // 비동기 방식
       Future<void> loadCharacterStatsAsync() async {
